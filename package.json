@@ -1,0 +1,22 @@
+{
+  "name": "mysteryboard",
+  "version": "1.0.0",
+  "description": "An anonymous app for posting your thoughts",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "author": "Christian B. Martinez",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dayjs": "^1.10.4",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "moment": "^2.29.1",
+    "mongoose": "^5.11.18",
+    "nodemon": "^2.0.7",
+    "path": "^0.12.7"
+  }
+}
