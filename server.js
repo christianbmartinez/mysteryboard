@@ -28,11 +28,11 @@ const MysteryBoard = mongoose.model('MysteryBoard', mysteryBoardSchema)
 
 app.use(express.static(path.join(__dirname, 'public')))
 
-app.get('/index', (req, res) => {
-    MysteryBoard.find({}, (err, mysteryboard) => { 
-        res.render('index', {
-            mysteryBoardList: mysteryboard, 
-            postedDay: dayjs(mysteryboard.date).toNow() // Get s/m/h/date
+app.get('/mysteryboards', (req, res) => {
+    MysteryBoard.find({}, (err, posts) => { 
+        res.render('mysteryboards', {
+            dayjs: dayjs,
+            mysteryBoards: posts
         })
     }).sort({date: -1}) // Sort from newest to oldest
 
@@ -43,7 +43,7 @@ app.post('/', (req, res) => {
     { name: req.body.name, content: req.body.content, date: req.body.date }
     )
     newMysteryBoard.save()
-    res.redirect('/index')
+    res.redirect('/mysteryboards')
 })
 
 app.listen(process.env.PORT, () => console.log(`Server listening on port ${process.env.PORT}`)) // Listen for a client connection
