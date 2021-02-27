@@ -12,10 +12,10 @@
     Add a comment feature, 
     Make the most upvoted go to top,
     Add truncated paragraphs and a read more if they want to see it,
-    Limit the amount of text that can be submitted,
     Back to top button,
     Share on social media,
-    User can pick a random id to go by - then they can get tagged
+    User can pick a random id to go by - then they can get tagged,
+    Modal from this page to submit a new post
     --> 
 </head>
 <body>
@@ -45,21 +45,68 @@
     <div class="container-fluid action">
         <ul class="nav justify-content-center">
             <li class="nav-item">
-                <div id="new-post" class="action-btn">
+                <div type="button" data-bs-toggle="modal" data-bs-target="#new-post" class="action-btn">
                     <i class="material-icons">edit</i>   
                 </div>
             </li>
             <li class="nav-item">
-                <div id="refresh" class="action-btn">
+                <div id="refresh" type="button" class="action-btn">
                     <i class="material-icons">cached</i>   
                 </div>
             </li>
         </ul>   
+    </div> 
+    <div class="modal fade" id="new-post" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New Post</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="form" method="POST" action="/">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" minlength="3" maxlength="20" class="form-control" id="user" name="name" placeholder="Captain Thunderpants">
+                        </div>
+                        <div class="mb-3">
+                            <label for="content" class="form-label">Content*</label>
+                            <textarea required minlength="5" maxlength="1000" class="form-control" id="content" name="content" placeholder="Have you ever wondered if we are the aliens?" rows="3"></textarea>
+                        </div>
+                        <input id="date" name="date" type="hidden">                
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button id="submit" type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>            
+            </div>
+        </div>
     </div>
-    <script>
-        document.getElementById('refresh').onclick = () => {
-            window.location.reload()
-        }
-    </script>  
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+<script>
+    const refresh = document.getElementById('refresh')
+    const form = document.getElementById('form')  
+    const user = document.getElementById('user')
+    const content = document.getElementById('content')
+    const submit = document.getElementById('submit')
+    const date = document.getElementById('date')
+    const newPost = document.getElementById('new-post')
+
+    newPost.addEventListener('show.bs.modal', function (event) {
+      const button = event.relatedTarget
+    })
+
+    form.onsubmit = e => {
+        if (!form.checkValidity()) {
+        e.preventDefault()
+        e.stopPropagation()
+        }  
+        user.value ? user.value : user.value = 'Anonymous'
+        date.value = Date.now()
+        form.classList.add('was-validated')
+    }, false      
+    
+</script> 
 </body>
 </html>
