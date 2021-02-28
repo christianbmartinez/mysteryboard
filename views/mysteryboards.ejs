@@ -8,14 +8,14 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous"></head>
     <link rel="stylesheet" href="css/style.css">
-    <!--Add an upvote feature, 
+    <!--Add an upvote feature, ***
     Add a comment feature, 
     Make the most upvoted go to top,
     Add truncated paragraphs and a read more if they want to see it,
-    Back to top button,
+    Back to top button,***
     Share on social media,
     User can pick a random id to go by - then they can get tagged,
-    Modal from this page to submit a new post
+    Integrate heart button count to db
     --> 
 </head>
 <body>
@@ -30,14 +30,18 @@
                 <div class="row">
                     <div class="col-sm">
                         <figure class="text-center">
-                        <blockquote class="blockquote">
-                            <%= mysteryboard.content %>
-                        </blockquote>
-                        <figcaption class="mysteryboard-footer">
-                            <%= dayjs(mysteryboard.date).fromNow() %> by <%= mysteryboard.name %>
-                        </figcaption>
+                            <blockquote class="blockquote">
+                                <%= mysteryboard.content %>
+                            </blockquote>
+                            <figcaption class="mysteryboard-footer">
+                                <%= dayjs(mysteryboard.date).fromNow() %> by <%= mysteryboard.name %>
+                            </figcaption>
                         </figure>
                     </div>
+                </div>
+                <div class="hearts">
+                    <i class="material-icons" id="<%= mysteryboard._id %>" onclick="handleHeart('<%= mysteryboard._id %>')">favorite_border</i>
+                    <span class="heart-count"><%= mysteryboard.hearts ? mysteryboard.hearts : 0 %> hearts</span>                       
                 </div>
             </div>
         <%  }) %>
@@ -92,6 +96,44 @@
     const submit = document.getElementById('submit')
     const date = document.getElementById('date')
     const newPost = document.getElementById('new-post')
+    
+    // Custom loop to toggle heart icon / animations on and off
+
+    handleHeart = (postId) => {
+        let data = {hearts: 122}
+        fetch(`mysteryboards/${postId}`, {
+        method: "POST", 
+        body: JSON.stringify(data) // Figure this out. Not sending data. Findbyidandupdate docs tomorrow
+        }).then(res => {
+        console.log("Request complete! response:", res);
+        });
+        let heart = document.getElementById(postId) 
+        heart.classList.add('fade-out') 
+        heart.innerHTML = 'favorite'
+        setTimeout(() => {heart.classList.remove('fade-out')},300)
+        heart.onclick = () => {
+            fetch(`mysteryboards/${postId}`, {
+            method: "POST", 
+            body: JSON.stringify('This is also a test.')
+            }).then(res => {
+            console.log("Request complete! response:", res);
+            }); 
+            heart.classList.add('fade-out')
+            heart.innerHTML = 'favorite_border'
+            setTimeout(() => {heart.classList.remove('fade-out')},300)
+            heart.onclick = () => {
+                handleHeart(postId)
+            }
+        }
+    }
+
+    // Refresh Button
+
+    refresh.onclick = () => {
+        window.location.reload()
+    }
+
+    // New Post Modal
 
     newPost.addEventListener('show.bs.modal', function (event) {
       const button = event.relatedTarget

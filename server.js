@@ -21,7 +21,7 @@ mongoose.connect(process.env.MONGO_DB, {
 }) // Connect our app to mongodb
 
 const mysteryBoardSchema = mongoose.Schema(
-    { name: String, content: String, date: Number }
+    { name: String, content: String, date: Number, hearts: Number }
 )
 
 const MysteryBoard = mongoose.model('MysteryBoard', mysteryBoardSchema)
@@ -40,10 +40,19 @@ app.get('/mysteryboards', (req, res) => {
 
 app.post('/', (req, res) => {
     let newMysteryBoard = new MysteryBoard(
-    { name: req.body.name, content: req.body.content, date: req.body.date }
+    { name: req.body.name, content: req.body.content, date: req.body.date, hearts: 0 }
     )
+    console.log(newMysteryBoard.hearts)
     newMysteryBoard.save()
     res.redirect('/mysteryboards')
+})
+
+app.post('/mysteryboards/:id', (req, res) => {
+    //MysteryBoard.findByIdAndUpdate(
+    //    req.params.id,
+    //)
+    console.log(req.params.id)
+    console.log(req.body)
 })
 
 app.listen(process.env.PORT, () => console.log(`Server listening on port ${process.env.PORT}`)) // Listen for a client connection

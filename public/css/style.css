@@ -119,7 +119,7 @@ p {
 
 .action-btn {
     border-radius: 50%;
-    background-color: #55b7f6;
+    background-color: #e355f6;
     padding: 0.07em;
     margin: 0.8em;
     cursor: pointer;
@@ -128,6 +128,41 @@ p {
 
 .action-btn:hover {
     box-shadow: none;
+    background-color: #d950eb;
+}
+
+.hearts {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.hearts .material-icons {
+    color: #ccc;
+    cursor: pointer;
+    user-select: none; 
+    margin-right: 0.3rem;
+    vertical-align: middle;
+    -webkit-user-select: none; 
+    -khtml-user-select: none; 
+    -moz-user-select: none; 
+    -ms-user-select: none; 
+}
+
+.heart-count {
+    font-size: 0.8em;
+    vertical-align: sub;
+}
+
+.fade-out {
+    animation: fadeOut 200ms linear
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 0;
+    } 100% {
+        opacity: 100%;
+    }
 }
 
 .material-icons {
