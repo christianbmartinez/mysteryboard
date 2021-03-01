@@ -130,7 +130,7 @@
             fetch(`mysteryboards/${postId}/unheart`, {
                 method: 'PUT',
                 'Content-Type': 'application/json'
-            }).then(res => console.log(res))
+            })
             heart.classList.add('fade-out')
             heart.innerHTML = 'favorite_border'
             setTimeout(() => {heart.classList.remove('fade-out')}, 300)

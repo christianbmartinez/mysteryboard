@@ -54,12 +54,6 @@ app.post('/', (req, res) =>  {
     res.redirect('/mysteryboards')
 })
 
-// We have two endpoints - heart && unheart. 
-// User hearts the post, goes to heart endpoint and the db should increment
-// and update the heart by 1. /unheart should decrement the heart count by -1. 
-// This works perfectly. The only problem is that the client has to refresh the page
-// to view the updated data. Ideally, it should be synced. 
-
 app.put('/mysteryboards/:id/heart', async (req, res) => {
     try {
         const increment = await MysteryBoard.findByIdAndUpdate(req.params.id, { $inc: { hearts: 1 }}, { new: true })
