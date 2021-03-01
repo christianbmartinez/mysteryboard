@@ -32,7 +32,7 @@
                 </div>
                 <div class="hearts">
                     <i class="material-icons" id="<%= mysteryboard._id %>" onclick="handleHeart('<%= mysteryboard._id %>')">favorite_border</i>
-                    <span class="heart-count"><%= mysteryboard.hearts %> hearts</span>                       
+                    <span id="heart-<%= mysteryboard._id %>" class="heart-count"><%= mysteryboard.hearts %></span>                       
                 </div>
             </div>
         <%  }) %>
@@ -114,6 +114,8 @@
     // Handle heart
 
     handleHeart = (postId) => { 
+        document.getElementById(`heart-${postId}`).innerHTML = 
+        Number(document.getElementById(`heart-${postId}`).innerHTML) + 1
         fetch(`mysteryboards/${postId}/heart`, {
             method: 'PUT',
             'Content-Type': 'application/json'
@@ -123,6 +125,8 @@
         heart.innerHTML = 'favorite'
         setTimeout(() => {heart.classList.remove('fade-out')}, 300)
         heart.onclick = () => {
+            document.getElementById(`heart-${postId}`).innerHTML = 
+            Number(document.getElementById(`heart-${postId}`).innerHTML) - 1
             fetch(`mysteryboards/${postId}/unheart`, {
                 method: 'PUT',
                 'Content-Type': 'application/json'
