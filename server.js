@@ -38,6 +38,14 @@ app.get('/mysteryboards', (req, res) => {
 
 })
 
+app.post('/mysteryboards', (req, res) =>  {
+    let newMysteryBoard = new MysteryBoard(
+    { name: req.body.name, content: req.body.content, date: req.body.date, hearts: 0 }
+    )
+    newMysteryBoard.save()
+    res.redirect(req.get('referer'))
+})
+
 app.post('/', (req, res) =>  {
     let newMysteryBoard = new MysteryBoard(
     { name: req.body.name, content: req.body.content, date: req.body.date, hearts: 0 }

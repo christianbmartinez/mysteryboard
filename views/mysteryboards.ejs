@@ -49,6 +49,11 @@
                     <i class="material-icons">cached</i>   
                 </div>
             </li>
+            <li class="nav-item">
+            <div id="btt-btn" type="button" class="action-btn" onclick="backToTop()">
+                <i class="material-icons">arrow_circle_up</i>   
+            </div>
+            </li>
         </ul>   
     </div> 
     <div class="modal fade" id="new-post" tabindex="-1" aria-hidden="true">
@@ -87,9 +92,27 @@
     const submit = document.getElementById('submit')
     const date = document.getElementById('date')
     const newPost = document.getElementById('new-post')
+
+    // Back to top
+
+    const bttButton = document.getElementById('btt-btn');
+    window.onscroll = () => scrollPos()
+
+    scrollPos = () => {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            bttButton.style.display = 'block'
+        } else {
+            bttButton.style.display = 'none'
+        }
+    }
+
+    backToTop = () => {
+        document.body.scrollTop = 0 
+        document.documentElement.scrollTop = 0
+    }
     
     // Handle heart
-    
+
     handleHeart = (postId) => { 
         fetch(`mysteryboards/${postId}/heart`, {
             method: 'PUT',
