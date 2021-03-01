@@ -89,9 +89,7 @@
     const newPost = document.getElementById('new-post')
     
     // Handle heart
-    // Increase the like count in the db when user clicks and show on screen,
-    // Decrese the like count in the db when the user clicks and show on screen
-
+    
     handleHeart = (postId) => { 
         fetch(`mysteryboards/${postId}/heart`, {
             method: 'PUT',
