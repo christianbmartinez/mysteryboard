@@ -8,15 +8,6 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous"></head>
     <link rel="stylesheet" href="css/style.css">
-    <!--Add an upvote feature, ***
-    Add a comment feature, 
-    Make the most upvoted go to top,
-    Add truncated paragraphs and a read more if they want to see it,
-    Back to top button,***
-    Share on social media,
-    User can pick a random id to go by - then they can get tagged,
-    Integrate heart button count to db
-    --> 
 </head>
 <body>
     <nav>
@@ -41,7 +32,7 @@
                 </div>
                 <div class="hearts">
                     <i class="material-icons" id="<%= mysteryboard._id %>" onclick="handleHeart('<%= mysteryboard._id %>')">favorite_border</i>
-                    <span class="heart-count"><%= mysteryboard.hearts ? mysteryboard.hearts : 0 %> hearts</span>                       
+                    <span class="heart-count"><%= mysteryboard.hearts %> hearts</span>                       
                 </div>
             </div>
         <%  }) %>
@@ -97,30 +88,27 @@
     const date = document.getElementById('date')
     const newPost = document.getElementById('new-post')
     
-    // Custom loop to toggle heart icon / animations on and off
+    // Handle heart
+    // Increase the like count in the db when user clicks and show on screen,
+    // Decrese the like count in the db when the user clicks and show on screen
 
-    handleHeart = (postId) => {
-        let data = {hearts: 122}
-        fetch(`mysteryboards/${postId}`, {
-        method: "POST", 
-        body: JSON.stringify(data) // Figure this out. Not sending data. Findbyidandupdate docs tomorrow
-        }).then(res => {
-        console.log("Request complete! response:", res);
-        });
-        let heart = document.getElementById(postId) 
+    handleHeart = (postId) => { 
+        fetch(`mysteryboards/${postId}/heart`, {
+            method: 'PUT',
+            'Content-Type': 'application/json'
+        })
+        let heart = document.getElementById(postId)
         heart.classList.add('fade-out') 
         heart.innerHTML = 'favorite'
-        setTimeout(() => {heart.classList.remove('fade-out')},300)
+        setTimeout(() => {heart.classList.remove('fade-out')}, 300)
         heart.onclick = () => {
-            fetch(`mysteryboards/${postId}`, {
-            method: "POST", 
-            body: JSON.stringify('This is also a test.')
-            }).then(res => {
-            console.log("Request complete! response:", res);
-            }); 
+            fetch(`mysteryboards/${postId}/unheart`, {
+                method: 'PUT',
+                'Content-Type': 'application/json'
+            }).then(res => console.log(res))
             heart.classList.add('fade-out')
             heart.innerHTML = 'favorite_border'
-            setTimeout(() => {heart.classList.remove('fade-out')},300)
+            setTimeout(() => {heart.classList.remove('fade-out')}, 300)
             heart.onclick = () => {
                 handleHeart(postId)
             }
@@ -135,9 +123,11 @@
 
     // New Post Modal
 
-    newPost.addEventListener('show.bs.modal', function (event) {
+    newPost.addEventListener('show.bs.modal', (event) => {
       const button = event.relatedTarget
     })
+
+    // New Post Form
 
     form.onsubmit = e => {
         if (!form.checkValidity()) {
@@ -147,7 +137,7 @@
         user.value ? user.value : user.value = 'Anonymous'
         date.value = Date.now()
         form.classList.add('was-validated')
-    }, false      
+    }, false   
     
 </script> 
 </body>
