@@ -15,14 +15,17 @@
           <a class="logo" href="/">mysteryboard</a>
         </div>
     </nav>
-    <div class="container"> 
+    <div class="container">
+        <% if (mysteryBoards.length > 0) { %> 
         <% mysteryBoards.forEach(mysteryboard => { %>
             <div class="post">
                 <div class="row">
                     <div class="col-sm">
                         <figure class="text-center">
                             <blockquote class="blockquote">
-                                <%= mysteryboard.content %>
+                                <div id="content-<%= mysteryboard._id %>">
+                                    <%= mysteryboard.content %>                                
+                                </div>
                             </blockquote>
                             <figcaption class="mysteryboard-footer">
                                 <%= dayjs(mysteryboard.date).fromNow() %> by <%= mysteryboard.name %>
@@ -35,26 +38,46 @@
                     <span id="heart-<%= mysteryboard._id %>" class="heart-count"><%= mysteryboard.hearts %></span>                       
                 </div>
             </div>
-        <%  }) %>
-    </div>
-    <div class="container-fluid action">
-        <ul class="nav justify-content-center">
-            <li class="nav-item">
-                <div type="button" data-bs-toggle="modal" data-bs-target="#new-post" class="action-btn">
-                    <i class="material-icons">edit</i>   
-                </div>
-            </li>
-            <li class="nav-item">
-                <div id="refresh" type="button" class="action-btn">
-                    <i class="material-icons">cached</i>   
-                </div>
-            </li>
-            <li class="nav-item">
-            <div id="btt-btn" type="button" class="action-btn" onclick="backToTop()">
-                <i class="material-icons">arrow_circle_up</i>   
+            <div class="container-fluid action">
+                <ul class="nav justify-content-center">
+                    <li class="nav-item">
+                        <div type="button" data-bs-toggle="modal" data-bs-target="#new-post" class="action-btn">
+                            <i class="material-icons">edit</i>   
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div id="refresh" type="button" class="action-btn">
+                            <i class="material-icons">cached</i>   
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                    <div id="btt-btn" type="button" class="action-btn" onclick="backToTop()">
+                        <i class="material-icons">arrow_circle_up</i>   
+                    </div>
+                    </li>
+                </ul>   
             </div>
-            </li>
-        </ul>   
+        <%  }) %>
+        <%  } else { %>
+            <div class="no-results">
+                <img class="hero-img" src="notfound.svg" alt="Not Found | MysteryBoard | An anonymous app for posting your thoughts">
+                <div class="row">
+                    <div class="col-sm">
+                        <h4 class="no-results--heading">
+                            No mysteryboards found
+                        </h4>
+                        <p class="no-results--text">
+                            Click the icon below to create your first post!
+                            <div class="button-container">
+                            <div type="button" data-bs-toggle="modal" data-bs-target="#new-post" class="action-btn--no-results">
+                                <i class="material-icons">edit</i>
+                            </div>   
+                            </div>  
+                        </p>
+                    </div>
+                </div>   
+            </div>
+        <%  } %>
     </div> 
     <div class="modal fade" id="new-post" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -92,48 +115,106 @@
     const submit = document.getElementById('submit')
     const date = document.getElementById('date')
     const newPost = document.getElementById('new-post')
+    let mysteryPosts = document.querySelectorAll('.blockquote')
+    let longPosts = [] // Empty array we will push and store long posts into
+    let truncateLength = 250 // Truncate mysteryboard posts over this length
 
+    // Read More
+
+    mysteryPosts.forEach(post => { // Loop through all posts
+        // If the data is longer than our truncate limit, handle it
+        if (post.childNodes[1].attributes[0].ownerElement.innerHTML.length >= truncateLength) {
+        // Push the long posts and id's into our empty array to store them 
+        longPosts.push([post.childNodes[1].attributes[0].value, post.childNodes[1].attributes[0].ownerElement.innerHTML])
+        // Insert truncated data into the dom for all long posts
+        // Dynamically generate a read more button and push the ids as arguments
+        document.getElementById(post.childNodes[1].attributes[0].value).innerHTML = 
+        `${post.childNodes[1].attributes[0].ownerElement.innerHTML.substring(0, truncateLength)}
+        <span class="read-more" onclick="readMore('${post.childNodes[1].attributes[0].value}')"> ...more</span>`
+        // Handle the read more button      
+        readMore = (contentId) => {
+            // Retreive data in the long posts array and loop it
+            longPosts.forEach(entry => {
+                // If the id from long posts matches the id of arguments, display the full length content
+                // Dynamically generate a read less button
+                if (entry[0] === contentId) {
+                    document.getElementById(contentId).innerHTML = 
+                    `${entry[0,1]}
+                    <span class="read-more" onclick="readLess('${contentId}')"> ...less</span>`                
+                }
+            })
+        }
+        // Handle the read less button
+        readLess = (contentId) => {
+            // We basically do the same function again, in reverse
+            longPosts.forEach(entry => {
+                if (entry[0] === contentId) {
+                    // This time, we will return the content back to its truncated state
+                    // And re render the read more button
+                    document.getElementById(contentId).innerHTML = 
+                    `${entry[0,1].substring(0, truncateLength)}
+                    <span class="read-more" onclick="readMore('${contentId}')"> ...more</span>`                
+                }
+            })
+        }
+        }
+    })  
     // Back to top
 
-    const bttButton = document.getElementById('btt-btn');
+    const bttButton = document.getElementById('btt-btn') 
+    // When a scroll occurs, call our scroll function
     window.onscroll = () => scrollPos()
 
-    scrollPos = () => {
+    scrollPos = () => { 
+        // If user is past 20px from the top, display our back to top button
+        // Otherwise, hide it
         if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
             bttButton.style.display = 'block'
         } else {
             bttButton.style.display = 'none'
         }
     }
-
-    backToTop = () => {
+    // On click, send the user to the absolute top of the page
+    backToTop = () => { 
         document.body.scrollTop = 0 
         document.documentElement.scrollTop = 0
     }
     
-    // Handle heart
-
-    handleHeart = (postId) => { 
+    // Handle heart/unheart
+    
+    // Pass in the id as an argument to keep track of each unique post
+    handleHeart = (postId) => {
+        // Grab the heart count data
         document.getElementById(`heart-${postId}`).innerHTML = 
+        // Convert the string into a number and increment value by 1
         Number(document.getElementById(`heart-${postId}`).innerHTML) + 1
+        // On the server, a put request to mysteryboards/:id/heart 
+        // endpoint increases heart count by 1 and saves to our database.  
         fetch(`mysteryboards/${postId}/heart`, {
             method: 'PUT',
             'Content-Type': 'application/json'
         })
+        // Heart icon styling, switch icon on click
         let heart = document.getElementById(postId)
         heart.classList.add('fade-out') 
         heart.innerHTML = 'favorite'
         setTimeout(() => {heart.classList.remove('fade-out')}, 300)
+        // If the user changes their mind and wishes to unheart, handle it
         heart.onclick = () => {
             document.getElementById(`heart-${postId}`).innerHTML = 
+            // Decrement the value by 1 on the client
             Number(document.getElementById(`heart-${postId}`).innerHTML) - 1
+            // On the server, a put request to mysteryboards/:id/unheart 
+            // endpoint decreases heart count by 1 and saves to our database. 
             fetch(`mysteryboards/${postId}/unheart`, {
                 method: 'PUT',
                 'Content-Type': 'application/json'
             })
+            // Heart icon styling, switch icon on click
             heart.classList.add('fade-out')
             heart.innerHTML = 'favorite_border'
             setTimeout(() => {heart.classList.remove('fade-out')}, 300)
+            // On a third heart click, we can loop our handleHeart function
             heart.onclick = () => {
                 handleHeart(postId)
             }
@@ -154,11 +235,13 @@
 
     // New Post Form
 
-    form.onsubmit = e => {
+    form.onsubmit = e => { 
+        // Basic Form Validation
         if (!form.checkValidity()) {
         e.preventDefault()
         e.stopPropagation()
         }  
+        // Define a default user name, timestamp
         user.value ? user.value : user.value = 'Anonymous'
         date.value = Date.now()
         form.classList.add('was-validated')
