@@ -9,6 +9,9 @@ require('dotenv').config()
 const bodyParser = require('body-parser') // Parse bodies
 const ejs = require('ejs') // We are using ejs to render the data from database out to the page
 
+
+app.set('view engine', 'ejs') 
+
 app.use(bodyParser.urlencoded({ extended: true })) // Middleware for parsing request bodies
 
 mongoose.connect(process.env.MONGO_DB, { 
@@ -25,9 +28,7 @@ const mysteryBoardSchema = mongoose.Schema( // Mysteryboard Schema
 const MysteryBoard = mongoose.model('MysteryBoard', mysteryBoardSchema) // Model
 
 app.use(express.static(path.join(__dirname, 'public'))) // /public
-app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'ejs') 
-app.get('/', (req, res) => res.render('/index'))
+
 app.get('/mysteryboards', (req, res) => { // /mysteryboards 
     MysteryBoard.find({}, (err, mysteryboards) => { // Search mongo for mysteryboards data
         res.render('mysteryboards', { // Render the data to the page
