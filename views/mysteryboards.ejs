@@ -15,70 +15,72 @@
           <a class="logo" href="/">mysteryboard</a>
         </div>
     </nav>
+<% if (mysteryBoards.length > 0) { %> 
+    <% mysteryBoards.forEach(mysteryboard => { %>
     <div class="container">
-        <% if (mysteryBoards.length > 0) { %> 
-        <% mysteryBoards.forEach(mysteryboard => { %>
-            <div class="post">
-                <div class="row">
-                    <div class="col-sm">
-                        <figure class="text-center">
-                            <blockquote class="blockquote">
-                                <div id="content-<%= mysteryboard._id %>">
-                                    <%= mysteryboard.content %>                                
-                                </div>
-                            </blockquote>
-                            <figcaption class="mysteryboard-footer">
-                                <%= dayjs(mysteryboard.date).fromNow() %> by <%= mysteryboard.name %>
-                            </figcaption>
-                        </figure>
-                    </div>
-                </div>
-                <div class="hearts">
-                    <i class="material-icons" id="<%= mysteryboard._id %>" onclick="handleHeart('<%= mysteryboard._id %>')">favorite_border</i>
-                    <span id="heart-<%= mysteryboard._id %>" class="heart-count"><%= mysteryboard.hearts %></span>                       
+        <div class="post">
+            <div class="row">
+                <div class="col-sm">
+                    <figure class="text-center">
+                        <blockquote class="blockquote">
+                            <div id="content-<%= mysteryboard._id %>">
+                                <%= mysteryboard.content %>                                
+                            </div>
+                        </blockquote>
+                        <figcaption class="mysteryboard-footer">
+                            <%= dayjs(mysteryboard.date).fromNow() %> by <%= mysteryboard.name %>
+                        </figcaption>
+                    </figure>
                 </div>
             </div>
-            <div class="container-fluid action">
-                <ul class="nav justify-content-center">
-                    <li class="nav-item">
-                        <div type="button" data-bs-toggle="modal" data-bs-target="#new-post" class="action-btn">
-                            <i class="material-icons">edit</i>   
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <div id="refresh" type="button" class="action-btn">
-                            <i class="material-icons">cached</i>   
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                    <div id="btt-btn" type="button" class="action-btn" onclick="backToTop()">
-                        <i class="material-icons">arrow_circle_up</i>   
-                    </div>
-                    </li>
-                </ul>   
+            <div class="hearts">
+                <i class="material-icons" id="<%= mysteryboard._id %>" onclick="handleHeart('<%= mysteryboard._id %>')">favorite_border</i>
+                <span id="heart-<%= mysteryboard._id %>" class="heart-count"><%= mysteryboard.hearts %></span>                       
             </div>
-        <%  }) %>
-        <%  } else { %>
-            <div class="no-results">
-                <img class="hero-img" src="notfound.svg" alt="Not Found | MysteryBoard | An anonymous app for posting your thoughts">
-                <div class="row">
-                    <div class="col-sm">
-                        <h4 class="no-results--heading">
-                            No mysteryboards found
-                        </h4>
-                        <p class="no-results--text">
-                            Click the icon below to create your first post!
-                            <div class="button-container">
-                            <div type="button" data-bs-toggle="modal" data-bs-target="#new-post" class="action-btn--no-results">
-                                <i class="material-icons">edit</i>
-                            </div>   
-                            </div>  
-                        </p>
-                    </div>
-                </div>   
-            </div>
-        <%  } %>
+        </div>
+    </div>
+    <%  }) %>
+<%  } else { %>
+    <div class="container">
+        <div class="no-results">
+            <img class="hero-img" src="notfound.svg" alt="Not Found | MysteryBoard | An anonymous app for posting your thoughts">
+            <div class="row">
+                <div class="col-sm">
+                    <h4 class="no-results--heading">
+                        No mysteryboards found
+                    </h4>
+                    <p class="no-results--text">
+                        Click the icon below to create your first post!
+                    </p>
+                    <div class="button-container">
+                        <div type="button" data-bs-toggle="modal" data-bs-target="#new-post" class="action-btn--no-results">
+                            <i class="material-icons">edit</i>
+                        </div>   
+                    </div>  
+                </div>
+            </div>   
+        </div>
     </div> 
+<%  } %>
+    <div class="container-fluid action">
+        <ul class="nav justify-content-center">
+            <li class="nav-item">
+                <div type="button" data-bs-toggle="modal" data-bs-target="#new-post" class="action-btn">
+                    <i class="material-icons">edit</i>   
+                </div>
+            </li>
+            <li class="nav-item">
+                <div id="refresh" type="button" class="action-btn">
+                    <i class="material-icons">cached</i>   
+                </div>
+            </li>
+            <li class="nav-item">
+            <div id="btt-btn" type="button" class="action-btn" onclick="backToTop()">
+                <i class="material-icons">arrow_circle_up</i>   
+            </div>
+            </li>
+        </ul>   
+    </div>
     <div class="modal fade" id="new-post" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">

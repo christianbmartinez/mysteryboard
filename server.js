@@ -60,7 +60,7 @@ app.put('/mysteryboards/:id/heart', async (req, res) => { // Handle heart
         const increment = await MysteryBoard.findByIdAndUpdate(req.params.id, { $inc: { hearts: 1 }}, { new: true })
         console.log(increment.hearts) // 1 { hearts: 1 }
     } catch (err) {
-        console.log(err.message)
+        console.log('\x1b[31m', err.message)
     }
 })
 
@@ -70,8 +70,8 @@ app.put('/mysteryboards/:id/unheart', async (req, res) => { // Handle unheart
         const decrement = await MysteryBoard.findByIdAndUpdate(req.params.id, { $inc: { hearts: -1 }}, { new: true })
         console.log(decrement.hearts) // { hearts: 0 }
     } catch (err) {
-        console.log(err.message)
+        console.log('\x1b[31m', err.message)
     }
 })
 
-app.listen(process.env.PORT, () => console.log(`Server listening on port ${process.env.PORT}`)) // Listen for a client connection
+app.listen(process.env.PORT, () => console.log('\x1b[34m', `[Server] Listening on port ${process.env.PORT}...`)) // Listen for a client connection
