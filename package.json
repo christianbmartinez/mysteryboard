@@ -7,7 +7,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "start": "server.js"
+    "start": "node server.js"
   },
   "author": "Christian B. Martinez",
   "license": "ISC",
