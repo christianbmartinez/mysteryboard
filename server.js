@@ -51,7 +51,7 @@ app.post('/', (req, res) =>  { // Posting data from /index
     { name: req.body.name, content: req.body.content, date: req.body.date, hearts: 0 }
     )
     newMysteryBoard.save()
-    res.redirect('mysteryboards')
+    res.redirect('/mysteryboards')
 })
 
 app.put('mysteryboards/:id/heart', async (req, res) => { // Handle heart 
