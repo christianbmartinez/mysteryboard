@@ -29,11 +29,6 @@ const MysteryBoard = mongoose.model('MysteryBoard', mysteryBoardSchema) // Model
 
 app.use(express.static(path.join(__dirname, 'public'))) // /public
 
-app.get('/', (req, res) => { // /index
-    res.render('index')
-    console.log('Rendered index page')
-})
-
 app.get('/mysteryboards', (req, res) => { // /mysteryboards 
     MysteryBoard.find({}, (err, mysteryboards) => { // Search mongo for mysteryboards data
         res.render('mysteryboards', { // Render the data to the page
