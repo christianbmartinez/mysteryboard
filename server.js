@@ -38,7 +38,7 @@ app.get('/mysteryboards', (req, res) => { // /mysteryboards
     }).sort({hearts: -1}) // Sort from most to least hearted
 })
 
-app.post('mysteryboards', (req, res) =>  { // Posting data from /mysteryboards
+app.post('/mysteryboards', (req, res) =>  { // Posting data from /mysteryboards
     let newMysteryBoard = new MysteryBoard(
     { name: req.body.name, content: req.body.content, date: req.body.date, hearts: 0 }
     )
@@ -54,7 +54,7 @@ app.post('/', (req, res) =>  { // Posting data from /index
     res.redirect('/mysteryboards')
 })
 
-app.put('mysteryboards/:id/heart', async (req, res) => { // Handle heart 
+app.put('/mysteryboards/:id/heart', async (req, res) => { // Handle heart 
     try {
         // Increment the heart count for the post by 1
         const increment = await MysteryBoard.findByIdAndUpdate(req.params.id, { $inc: { hearts: 1 }}, { new: true })
@@ -64,7 +64,7 @@ app.put('mysteryboards/:id/heart', async (req, res) => { // Handle heart
     }
 })
 
-app.put('mysteryboards/:id/unheart', async (req, res) => { // Handle unheart
+app.put('/mysteryboards/:id/unheart', async (req, res) => { // Handle unheart
     try {
         // Decrement the heart count for the post by 1
         const decrement = await MysteryBoard.findByIdAndUpdate(req.params.id, { $inc: { hearts: -1 }}, { new: true })
