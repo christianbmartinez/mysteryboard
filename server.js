@@ -74,4 +74,4 @@ app.put('/mysteryboards/:id/unheart', async (req, res) => { // Handle unheart
     }
 })
 
-app.listen(process.env.APP_URL, () => console.log('\x1b[34m', `[Server] Listening for a client connection at ${process.env.APP_URL}...`)) // Listen for a client connection
+app.listen(process.env.PORT, () => console.log('\x1b[34m', `[Server] Listening on port ${process.env.PORT}...`)) // Listen for a client connection
