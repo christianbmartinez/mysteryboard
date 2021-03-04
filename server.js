@@ -8,7 +8,6 @@ dayjs.extend(relativeTime)
 require('dotenv').config()
 const bodyParser = require('body-parser') // Parse bodies
 const ejs = require('ejs') // We are using ejs to render the data from database out to the page
-const port = process.env.PORT || 5000
 
 app.set('view engine', 'ejs') 
 
@@ -27,11 +26,7 @@ const mysteryBoardSchema = mongoose.Schema( // Mysteryboard Schema
 
 const MysteryBoard = mongoose.model('MysteryBoard', mysteryBoardSchema) // Model
 
-app.use(express.static(path.join(__dirname, '/public'))) // /public
-
-app.get('/', (req, res) => {
-    res.render('index');
-});
+app.use(express.static(path.join(__dirname, 'public'))) // /public
 
 app.get('/mysteryboards', (req, res) => { // /mysteryboards 
     MysteryBoard.find({}, (err, mysteryboards) => { // Search mongo for mysteryboards data
@@ -78,4 +73,4 @@ app.put('/mysteryboards/:id/unheart', async (req, res) => { // Handle unheart
     }
 })
 
-app.listen(port, () => console.log('\x1b[34m', `[Server] Listening on port ${port}...`)) // Listen for a client connection
+app.listen(process.env.PORT, () => console.log('\x1b[34m', `[Server] Listening on port ${process.env.PORT}...`)) // Listen for a client connection
