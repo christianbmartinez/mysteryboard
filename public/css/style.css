@@ -161,6 +161,7 @@ p {
 }
 
 .action-btn--no-results {
+    -webkit-appearance: none;
     border-radius: 50%;
     background-color: #713ee7;
     cursor: pointer;
@@ -179,6 +180,7 @@ p {
 }
 
 .action-btn {
+    -webkit-appearance: none;
     border-radius: 50%;
     background-color: #e355f6;
     margin: 0.8em;
