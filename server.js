@@ -13,7 +13,7 @@ app.set('view engine', 'ejs')
 
 app.use(bodyParser.urlencoded({ extended: true })) // Middleware for parsing request bodies
 
-mongoose.connect(process.env.MONGO_DB, { 
+mongoose.connect(`${process.env.MONGO_DB}`, { 
     useNewUrlParser: true, 
     useUnifiedTopology: true,
     useFindAndModify: false,
@@ -73,4 +73,4 @@ app.put('/mysteryboards/:id/unheart', async (req, res) => { // Handle unheart
     }
 })
 
-app.listen(process.env.PORT, () => console.log('\x1b[34m', `[Server] Listening on port ${process.env.PORT}...`)) // Listen for a client connection
+app.listen(`${process.env.PORT}`, () => console.log('\x1b[34m', `[Server] Listening on port ${process.env.PORT}...`)) // Listen for a client connection
