@@ -13,7 +13,7 @@ app.set('view engine', 'ejs')
 
 app.use(bodyParser.urlencoded({ extended: true })) // Middleware for parsing request bodies
 
-mongoose.connect('mongodb+srv://' + process.env.AUTH + '@cluster0.uifxl.mongodb.net/mysteryboard', { 
+mongoose.connect(process.env.MONGO_DB, { 
     useNewUrlParser: true, 
     useUnifiedTopology: true,
     useFindAndModify: false,
