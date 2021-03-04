@@ -13,6 +13,7 @@
   "author": "Christian B. Martinez",
   "license": "ISC",
   "dependencies": {
+    "bad-words": "^3.0.4",
     "body-parser": "^1.19.0",
     "dayjs": "^1.10.4",
     "dotenv": "^8.2.0",

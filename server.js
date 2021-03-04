@@ -8,7 +8,8 @@ dayjs.extend(relativeTime)
 require('dotenv').config()
 const bodyParser = require('body-parser') // Parse bodies
 const ejs = require('ejs') // We are using ejs to render the data from database out to the page
-
+const Filter = require('bad-words'),
+filter = new Filter();
 app.set('view engine', 'ejs') 
 
 app.use(bodyParser.urlencoded({ extended: true })) // Middleware for parsing request bodies
@@ -32,6 +33,7 @@ app.get('/mysteryboards', (req, res) => { // /mysteryboards
     MysteryBoard.find({}, (err, mysteryboards) => { // Search mongo for mysteryboards data
         res.render('mysteryboards', { // Render the data to the page
             dayjs: dayjs, // Pass in dayjs for our dates
+            filter: filter,
             mysteryBoards: mysteryboards // Pass in mysteryboards data
         })
     }).sort({hearts: -1}) // Sort from most to least hearted

@@ -24,11 +24,11 @@
                     <figure class="text-center">
                         <blockquote class="blockquote">
                             <div id="content-<%= mysteryboard._id %>">
-                                <%= mysteryboard.content %>                                
+                                <%= filter.clean(mysteryboard.content) %>                                
                             </div>
                         </blockquote>
                         <figcaption class="mysteryboard-footer">
-                            <%= dayjs(mysteryboard.date).fromNow() %> by <%= mysteryboard.name %>
+                            <%= dayjs(mysteryboard.date).fromNow() %> by <%= filter.clean(mysteryboard.name) %>
                         </figcaption>
                     </figure>
                 </div>
