@@ -8,6 +8,7 @@ dayjs.extend(relativeTime)
 require('dotenv').config()
 const bodyParser = require('body-parser') // Parse bodies
 const ejs = require('ejs') // We are using ejs to render the data from database out to the page
+const e = require('express')
 const Filter = require('bad-words'),
 filter = new Filter();
 app.set('view engine', 'ejs') 
@@ -22,7 +23,7 @@ mongoose.connect('mongodb+srv://admin:H0vSkp5IuVwdJq8P@cluster0.uifxl.mongodb.ne
 }) // Connect our app to mongodb
 
 const mysteryBoardSchema = mongoose.Schema( // Mysteryboard Schema
-    { name: String, content: String, date: Number, hearts: Number }
+    { name: String, content: String, comments: Array, date: Number, hearts: Number }
 )
 
 const MysteryBoard = mongoose.model('MysteryBoard', mysteryBoardSchema) // Model
@@ -33,7 +34,7 @@ app.get('/mysteryboards', (req, res) => { // /mysteryboards
     MysteryBoard.find({}, (err, mysteryboards) => { // Search mongo for mysteryboards data
         res.render('mysteryboards', { // Render the data to the page
             dayjs: dayjs, // Pass in dayjs for our dates
-            filter: filter,
+            filter: filter, // Pass in bad words
             mysteryBoards: mysteryboards // Pass in mysteryboards data
         })
     }).sort({hearts: -1}) // Sort from most to least hearted

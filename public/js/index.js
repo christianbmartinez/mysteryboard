@@ -11,6 +11,7 @@ window.onload = () => { // Form validation
       e.stopPropagation()
     }  
     user.value ? user.value : user.value = 'Anonymous'
+    localStorage.setItem('username', user.value)
     date.value = Date.now()
     form.classList.add('was-validated')
   }, false      

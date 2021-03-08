@@ -35,11 +35,11 @@
             </div>
             <div class="hearts">
                 <i class="material-icons" id="<%= mysteryboard._id %>" onclick="handleHeart('<%= mysteryboard._id %>')">favorite_border</i>
-                <span id="heart-<%= mysteryboard._id %>" class="heart-count"><%= mysteryboard.hearts %></span>                       
+                <span id="heart-<%= mysteryboard._id %>" class="count"><%= mysteryboard.hearts %></span>
             </div>
         </div>
     </div>
-    <%  }) %>
+<%  }) %>
 <%  } else { %>
     <div class="container">
         <div class="no-results">
@@ -134,7 +134,7 @@
         `${post.childNodes[1].attributes[0].ownerElement.innerHTML.substring(0, truncateLength)}
         <span class="read-more" onclick="readMore('${post.childNodes[1].attributes[0].value}')"> ...more</span>`
         // Handle the read more button      
-        readMore = (contentId) => {
+        readMore = contentId => {
             // Retreive data in the long posts array and loop it
             longPosts.forEach(entry => {
                 // If the id from long posts matches the id of arguments, display the full length content
@@ -147,7 +147,7 @@
             })
         }
         // Handle the read less button
-        readLess = (contentId) => {
+        readLess = contentId => {
             // We basically do the same function again, in reverse
             longPosts.forEach(entry => {
                 if (entry[0] === contentId) {
@@ -185,7 +185,7 @@
     // Handle heart/unheart
     
     // Pass in the id as an argument to keep track of each unique post
-    handleHeart = (postId) => {
+    handleHeart = postId => {
         // Grab the heart count data
         document.getElementById(`heart-${postId}`).innerHTML = 
         // Convert the string into a number and increment value by 1
@@ -245,6 +245,7 @@
         }  
         // Define a default user name, timestamp
         user.value ? user.value : user.value = 'Anonymous'
+        localStorage.setItem('username', user.value)
         date.value = Date.now()
         form.classList.add('was-validated')
     }, false   
