@@ -11,5 +11,5 @@ When express redirects the user to the mysteryboards view, it renders the data f
 
 You don't need a username or password to use mysteryboard. 
 
-[Mysteryboard](https://mysteryboard.herokuapp.com/): View live
+[View live](https://mysteryboard.herokuapp.com/)
 
