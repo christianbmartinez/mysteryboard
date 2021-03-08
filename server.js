@@ -8,7 +8,6 @@ dayjs.extend(relativeTime)
 require('dotenv').config()
 const bodyParser = require('body-parser') // Parse bodies
 const ejs = require('ejs') // We are using ejs to render the data from database out to the page
-const e = require('express')
 const Filter = require('bad-words'),
 filter = new Filter();
 app.set('view engine', 'ejs') 

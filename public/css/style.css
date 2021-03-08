@@ -220,11 +220,6 @@ p {
     -ms-user-select: none; 
 }
 
-.comment-svg {
-    color: #ccc;
-    margin-left: 0.6rem;
-}
-
 .count {
     font-size: 0.8em;
     vertical-align: sub;
