@@ -24,7 +24,6 @@ body::-webkit-scrollbar-thumb {
 .nav-header {
     text-align: center;
     background-color: #713ee7;
-    color: #fff;
     padding: 0.75rem;
     margin-bottom: 3rem;
 }
@@ -38,8 +37,13 @@ body::-webkit-scrollbar-thumb {
     text-decoration: none;
 }
 
-.logo:hover {
-    color: #f9f9f9;
+.github-svg {
+    color: #fff;
+    cursor: pointer;
+}
+
+.github-svg:hover, .logo:hover {
+    color: #eee;
 }
 
 p {
