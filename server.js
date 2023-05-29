@@ -9,7 +9,7 @@ require('dotenv').config()
 const bodyParser = require('body-parser') // Parse bodies
 const ejs = require('ejs') // We are using ejs to render the data from database out to the page
 const Filter = require('bad-words'),
-filter = new Filter();
+filter = new Filter()
 app.set('view engine', 'ejs') 
 
 app.use(bodyParser.urlencoded({ extended: true })) // Middleware for parsing request bodies
