@@ -9,70 +9,100 @@ require('dotenv').config()
 const bodyParser = require('body-parser') // Parse bodies
 const ejs = require('ejs') // We are using ejs to render the data from database out to the page
 const Filter = require('bad-words'),
-filter = new Filter()
-app.set('view engine', 'ejs') 
+  filter = new Filter()
+app.set('view engine', 'ejs')
 
 app.use(bodyParser.urlencoded({ extended: true })) // Middleware for parsing request bodies
 
-mongoose.connect('mongodb+srv://admin:H0vSkp5IuVwdJq8P@cluster0.uifxl.mongodb.net/mysteryboard', { 
-    useNewUrlParser: true, 
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-    useCreateIndex: true 
+mongoose.connect(process.env.MONGO_DB, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false,
+  useCreateIndex: true,
 }) // Connect our app to mongodb
 
-const mysteryBoardSchema = mongoose.Schema( // Mysteryboard Schema
-    { name: String, content: String, comments: Array, date: Number, hearts: Number }
+const mysteryBoardSchema = mongoose.Schema(
+  // Mysteryboard Schema
+  {
+    name: String,
+    content: String,
+    comments: Array,
+    date: Number,
+    hearts: Number,
+  }
 )
 
 const MysteryBoard = mongoose.model('MysteryBoard', mysteryBoardSchema) // Model
 
 app.use(express.static(path.join(__dirname, 'public'))) // /public
 
-app.get('/mysteryboards', (req, res) => { // /mysteryboards 
-    MysteryBoard.find({}, (err, mysteryboards) => { // Search mongo for mysteryboards data
-        res.render('mysteryboards', { // Render the data to the page
-            dayjs: dayjs, // Pass in dayjs for our dates
-            filter: filter, // Pass in bad words
-            mysteryBoards: mysteryboards // Pass in mysteryboards data
-        })
-    }).sort({hearts: -1}) // Sort from most to least hearted
+app.get('/mysteryboards', (req, res) => {
+  // /mysteryboards
+  MysteryBoard.find({}, (err, mysteryboards) => {
+    // Search mongo for mysteryboards data
+    res.render('mysteryboards', {
+      // Render the data to the page
+      dayjs: dayjs, // Pass in dayjs for our dates
+      filter: filter, // Pass in bad words
+      mysteryBoards: mysteryboards, // Pass in mysteryboards data
+    })
+  }).sort({ hearts: -1 }) // Sort from most to least hearted
 })
 
-app.post('/mysteryboards', (req, res) =>  { // Posting data from /mysteryboards
-    let newMysteryBoard = new MysteryBoard(
-    { name: req.body.name, content: req.body.content, date: req.body.date, hearts: 0 }
+app.post('/mysteryboards', (req, res) => {
+  // Posting data from /mysteryboards
+  let newMysteryBoard = new MysteryBoard({
+    name: req.body.name,
+    content: req.body.content,
+    date: req.body.date,
+    hearts: 0,
+  })
+  newMysteryBoard.save()
+  res.redirect(req.get('referer'))
+})
+
+app.post('/', (req, res) => {
+  // Posting data from /index
+  let newMysteryBoard = new MysteryBoard({
+    name: req.body.name,
+    content: req.body.content,
+    date: req.body.date,
+    hearts: 0,
+  })
+  newMysteryBoard.save()
+  res.redirect('/mysteryboards')
+})
+
+app.put('/mysteryboards/:id/heart', async (req, res) => {
+  // Handle heart
+  try {
+    // Increment the heart count for the post by 1
+    const increment = await MysteryBoard.findByIdAndUpdate(
+      req.params.id,
+      { $inc: { hearts: 1 } },
+      { new: true }
     )
-    newMysteryBoard.save()
-    res.redirect(req.get('referer')) 
+    console.log(increment.hearts) // 1 { hearts: 1 }
+  } catch (err) {
+    console.log('\x1b[31m', err.message)
+  }
 })
 
-app.post('/', (req, res) =>  { // Posting data from /index
-    let newMysteryBoard = new MysteryBoard(
-    { name: req.body.name, content: req.body.content, date: req.body.date, hearts: 0 }
+app.put('/mysteryboards/:id/unheart', async (req, res) => {
+  // Handle unheart
+  try {
+    // Decrement the heart count for the post by 1
+    const decrement = await MysteryBoard.findByIdAndUpdate(
+      req.params.id,
+      { $inc: { hearts: -1 } },
+      { new: true }
     )
-    newMysteryBoard.save()
-    res.redirect('/mysteryboards')
+    console.log(decrement.hearts) // { hearts: 0 }
+  } catch (err) {
+    console.log('\x1b[31m', err.message)
+  }
 })
 
-app.put('/mysteryboards/:id/heart', async (req, res) => { // Handle heart 
-    try {
-        // Increment the heart count for the post by 1
-        const increment = await MysteryBoard.findByIdAndUpdate(req.params.id, { $inc: { hearts: 1 }}, { new: true })
-        console.log(increment.hearts) // 1 { hearts: 1 }
-    } catch (err) {
-        console.log('\x1b[31m', err.message)
-    }
-})
-
-app.put('/mysteryboards/:id/unheart', async (req, res) => { // Handle unheart
-    try {
-        // Decrement the heart count for the post by 1
-        const decrement = await MysteryBoard.findByIdAndUpdate(req.params.id, { $inc: { hearts: -1 }}, { new: true })
-        console.log(decrement.hearts) // { hearts: 0 }
-    } catch (err) {
-        console.log('\x1b[31m', err.message)
-    }
-})
-
-app.listen(process.env.PORT, () => console.log('\x1b[34m', `[Server] Listening on port ${process.env.PORT}...`)) // Listen for a client connection
+app.listen(process.env.PORT, () =>
+  console.log('\x1b[34m', `[Server] Listening on port ${process.env.PORT}...`)
+) // Listen for a client connection
